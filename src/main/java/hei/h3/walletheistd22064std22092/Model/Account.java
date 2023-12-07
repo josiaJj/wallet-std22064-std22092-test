@@ -4,7 +4,9 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -66,10 +68,8 @@ public class Account {
         }
 
         // Calculate balance at specified date and time
-        List<Transaction> transactionList = new ArrayList<>();
-        transactionList = getListTransactions();
         double balance = 0;
-        for (Transaction transaction : transactionList) {
+        for (Transaction transaction : getListTransactions()) {
             if (transaction.getDateTime().before(dateTime) || transaction.getDateTime().equals(dateTime)) {
                 if (transaction.getTransactionType().equals("Credit")) {
                     balance += transaction.getAmount();
@@ -88,5 +88,31 @@ public class Account {
         String formattedCurrentDateTime = currentDateTime.format(formatter);
 
         return getBalanceAtDateTime(formattedCurrentDateTime);
+    }
+    public List<Transaction> getBalanceListBetween(String startDateTime, String endDateTime) {
+        // Converting String Date into LocalDateTime
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startDateTimeInDate;
+        LocalDateTime endDateTimeInDate;
+
+        try {
+            startDateTimeInDate = LocalDateTime.parse(startDateTime, formatter);
+            endDateTimeInDate = LocalDateTime.parse(endDateTime, formatter);
+        } catch (DateTimeParseException e) {
+            System.out.println("Date format error");
+            return new ArrayList<>(); // Return an empty list or handle the error appropriately
+        }
+
+        List<Transaction> transactionListBetween = new ArrayList<>();
+        for (Transaction transaction : getListTransactions()) {
+            LocalDateTime transactionDateTime =
+                    LocalDateTime.ofInstant(transaction.getDateTime().toInstant(), ZoneId.systemDefault());
+
+            if (transactionDateTime.isAfter(startDateTimeInDate) && transactionDateTime.isBefore(endDateTimeInDate)) {
+                transactionListBetween.add(transaction);
+            }
+        }
+
+        return transactionListBetween;
     }
 }
