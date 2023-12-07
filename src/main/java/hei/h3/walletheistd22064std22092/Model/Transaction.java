@@ -20,4 +20,7 @@ public class Transaction {
     private double amount;
     private Date dateTime;
     private String transactionType;
+
+    public Transaction(int i, String salary, int i1, String credit) {
+    }
 }

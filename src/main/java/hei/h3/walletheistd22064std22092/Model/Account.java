@@ -26,6 +26,9 @@ public class Account {
     private Currency currency;
     private String accountType;
 
+    public Account(int i, String checkingAccount, int i1, Currency euro, String bank) {
+    }
+
     public Account performTransaction(Transaction transaction) {
         // Checking balance sufficiency for non-"Bank" accounts on debit transactions
         if (!accountType.equals("Bank") && transaction.getTransactionType().equals("Debit")) {
@@ -49,7 +52,8 @@ public class Account {
         return this;
     }
 
-    public double getBalanceAtDateTime(String dateTimeString) {
+    public double
+    getBalanceAtDateTime(String dateTimeString) {
         // Converting Strind Date into Object Date
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
         Date dateTime;
