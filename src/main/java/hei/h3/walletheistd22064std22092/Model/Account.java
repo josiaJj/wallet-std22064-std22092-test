@@ -3,6 +3,8 @@ package hei.h3.walletheistd22064std22092.Model;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -52,8 +54,7 @@ public class Account {
         return this;
     }
 
-    public double
-    getBalanceAtDateTime(String dateTimeString) {
+    public double getBalanceAtDateTime(String dateTimeString) {
         // Converting Strind Date into Object Date
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
         Date dateTime;
@@ -79,5 +80,13 @@ public class Account {
         }
 
         return balance;
+    }
+    public double getCurrentBalance() {
+        // Get Date and Time now
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedCurrentDateTime = currentDateTime.format(formatter);
+
+        return getBalanceAtDateTime(formattedCurrentDateTime);
     }
 }
