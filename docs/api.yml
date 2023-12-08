@@ -1,0 +1,437 @@
+openapi: 3.0.3
+info:
+  title: specification API Wallet
+  version: 1.4.0
+  description: STD22064 - STD22092
+servers:
+  - url: https://hei.wallet.api.com
+
+paths:
+  /transaction:
+    get:
+      tags:
+        - Transaction 
+      summary: Get all transaction
+      operationId: getAllTransaction
+      description: get all transaction with pagination
+      parameters:
+        - $ref: '#/components/parameters/PagePagination'
+        - $ref: '#/components/parameters/PageSizePagination'
+      responses:
+        200:
+          $ref: '#/components/responses/TransactionList200'
+        400:
+          $ref: "#/components/responses/400"
+        403:
+          $ref: "#/components/responses/403"
+        500:
+          $ref: "#/components/responses/500"
+    put:
+      tags:
+        - Transaction 
+      summary: Save or Update transaction
+      operationId: saveOrUpdateTransaction
+      description: Save list of new transaction or update if already exist 
+      requestBody:
+        required: true
+        description: List of the transaction to save or update
+        content:
+          application/json: 
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Transaction'
+      responses:
+        200:
+          $ref: '#/components/responses/TransactionList200'
+        400:
+          $ref: "#/components/responses/400"
+        403:
+          $ref: "#/components/responses/403"
+        500:
+          $ref: "#/components/responses/500"
+  /transaction/{transactionId}:
+    get:
+      tags:
+        - Transaction 
+      summary: Get one Transaction 
+      operationId: getOneTransaction
+      description: Get one transaction by a given id
+      parameters:
+        - in: path
+          name: transactionId 
+          schema:
+            type: string 
+          description: Id of the transaction to get
+          required: true
+      responses:
+        200:
+          $ref: '#/components/responses/Transaction200'
+        400:
+          $ref: "#/components/responses/400"
+        403:
+          $ref: "#/components/responses/403"
+        500:
+          $ref: "#/components/responses/500"
+  /account:
+    get:
+      tags:
+        - Account 
+      summary: Get all account 
+      operationId: getAllAccount
+      description: get all account with pagination
+      parameters:
+        - $ref: '#/components/parameters/PagePagination'
+        - $ref: '#/components/parameters/PageSizePagination'
+      responses:
+        200:
+          $ref: '#/components/responses/AccountList200'
+        400:
+          $ref: "#/components/responses/400"
+        403:
+          $ref: "#/components/responses/403"
+        500:
+          $ref: "#/components/responses/500"
+    put:
+      tags:
+        - Account 
+      summary: Save or Update account
+      operationId: saveOrUpdateAccount
+      description: Save list of new account or update if already exist 
+      requestBody:
+        required: true
+        description: List of the account to save or update
+        content:
+          application/json: 
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Account'
+      responses:
+        200:
+          $ref: '#/components/responses/AccountList200'
+        400:
+          $ref: "#/components/responses/400"
+        403:
+          $ref: "#/components/responses/403"
+        500:
+          $ref: "#/components/responses/500"
+  /account/{accountId}:
+    get:
+      tags:
+        - Account 
+      summary: Get one Account
+      operationId: getOneAccount
+      description: Get one account by a given id
+      parameters:
+        - in: path
+          name: accountId 
+          schema:
+            type: string 
+          description: Id of the account to get
+          required: true
+      responses:
+        200:
+          $ref: '#/components/responses/Account200'
+        400:
+          $ref: "#/components/responses/400"
+        403:
+          $ref: "#/components/responses/403"
+        500:
+          $ref: "#/components/responses/500"
+  /currency:
+    get:
+      tags:
+        - Currency
+      summary: Get all currency
+      operationId: getAllCurrency
+      description: get all currency with pagination
+      parameters:
+        - $ref: '#/components/parameters/PagePagination'
+        - $ref: '#/components/parameters/PageSizePagination'
+      responses:
+        200:
+          $ref: '#/components/responses/CurrencyList200'
+        400:
+          $ref: "#/components/responses/400"
+        403:
+          $ref: "#/components/responses/403"
+        500:
+          $ref: "#/components/responses/500"
+    put:
+      tags:
+        - Currency
+      summary: Save or Update currency
+      operationId: saveOrUpdateCurrency
+      description: Save list of new currency or update if already exist 
+      requestBody:
+        required: true
+        description: List of the currency to save or update
+        content:
+          application/json: 
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Currency'
+      responses:
+        200:
+          $ref: '#/components/responses/CurrencyList200'
+        400:
+          $ref: "#/components/responses/400"
+        403:
+          $ref: "#/components/responses/403"
+        500:
+          $ref: "#/components/responses/500"
+  /currency/{currencyId}:
+    get:
+      tags:
+        - Currency
+      summary: Get one currency
+      operationId: getOneCurrency
+      description: Get one currency by a given id
+      parameters:
+        - in: path
+          name: currencyId
+          schema:
+            type: string 
+            format: uuid
+          description: Id of the currency to get
+          required: true
+      responses:
+        200:
+          $ref: '#/components/responses/Currency200'
+        400:
+          $ref: "#/components/responses/400"
+        403:
+          $ref: "#/components/responses/403"
+        500:
+          $ref: "#/components/responses/500"
+components:
+  parameters:
+    PagePagination:
+      name: page
+      description: the first page specify is 1
+      in: query
+      schema:
+        type: integer
+        default: 1
+    PageSizePagination:
+      name: pageSize
+      description: Pagination pageSize which is 50 by default is not specified
+      in: query
+      schema:
+        type: integer
+        default: 50  
+  schemas:
+    TransactionBody:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBody'
+        - properties:
+            body:
+              $ref: '#/components/schemas/Transaction'
+    TransactionListBody:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBody'
+        - properties:
+            body:
+              type: array
+              items:
+                $ref: '#/components/schemas/Transaction'
+    TransactionType:
+      type: string
+      enum:
+        - WITHDRAWAL
+        - DEPOSIT
+        - TRANSFER
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '22092'
+        type:
+          $ref: '#/components/schemas/TransactionType'
+        label:
+          type: string
+          example: 'pret bancaire'
+        amount:
+          type: number
+          format: float
+          example: 400.02
+        date_and_time_transaction:
+          type: string
+          format: date-time
+          example: '2023-12-08 02:01:01'
+        transaction_type:
+          type: string
+          format: uuid
+          enum:
+            - debit
+            - sortie
+    AccountBody:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBody'
+        - properties:
+            body:
+              $ref: '#/components/schemas/Account'
+    AccountListBody:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBody'
+        - properties:
+            body:
+              type: array
+              items:
+                $ref: '#/components/schemas/Account'
+    Account:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'std22092'
+        name:
+          type: string
+          example: 'compte courant'
+        type:
+          $ref: '#/components/schemas/Account' 
+        balance:
+          type: number
+          format: float 
+          example: 400.02
+        creation_date:
+          type: string
+          format: date
+          example: '2023-12-08'
+        transaction_liste: 
+          type: string
+          enum:
+            - CHECKING 
+            - SAVING
+            - BUSINESS
+            - INVESTMENT
+            - CERTIFICATE_OF_DEPOSIT
+        devise :
+          type: string
+          enum:
+            - 'Ariary'
+            - 'Euro'
+    CurrencyBody:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBody'
+        - properties:
+            body:
+              $ref: '#/components/schemas/Currency'
+    CurrencyListBody:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBody'
+        - properties:
+            body:
+              type: array
+              items:
+                $ref: '#/components/schemas/Currency'
+    Currency:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'std22064'
+        name:
+          type: string
+          example: 'Euro'
+        code:
+          type: string
+          example: 'EUR'
+    ResponseBody:
+      type: object
+      properties:
+        message:
+          type: string
+          example: OK
+    PingBody:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBody'
+      example:
+        status:
+          message: pong 
+        body: null 
+    BadRequestBody:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBody'
+      example:
+        status:
+          message: BAD REQUEST
+        body: null 
+    ForbiddenBody:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBody'
+      example:
+        status:
+          message: FORBIDDEN
+        body: null 
+    InternalServerError:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBody'
+      example:
+        status:
+          message: INTERNAL SERVER ERROR 
+        body: null
+  responses:
+    Transaction200:
+      description: One Transaction 
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TransactionBody'
+    TransactionList200:
+      description: List of transaction 
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TransactionListBody'
+    Account200:
+      description: One Account 
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccountBody'
+    AccountList200:
+      description: List of account 
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccountListBody'
+    Currency200:
+      description: One currency 
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CurrencyBody'
+    CurrencyList200:
+      description: List of currency 
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CurrencyListBody'
+    Ping200:
+      description: pong
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PingBody'
+    400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequestBody'
+    403:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ForbiddenBody'
+    500:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
